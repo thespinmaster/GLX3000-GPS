@@ -6,7 +6,7 @@ The following instructions are for enabling the forwarding of NMEA gps messages 
 The messages are forwarded to a Victron CerboGX
 
 ## Hardware
-GL-Net x3000 Spitz router
+GL-Net x3000 Spitz router  
 Victron Cerbo GX
 
 ## Router setup
