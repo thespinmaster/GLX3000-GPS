@@ -30,7 +30,7 @@ Update the package manager
 Install nano package  
 ``opkg install nano``
 
-Change the port to the 5800. The port Cerbo for listens for gps data on  
+Change the port to the 5800. The port the Cerbo GX for listens on for gps data  
 ``nano /etc/config/gpsd``
 
 Check gpsd is working  
