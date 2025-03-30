@@ -1,4 +1,5 @@
-Router gps forwarding to the CerboGX
+
+# Router gps forwarding to the CerboGX
 
 The following instructions are for enabling the forwarding of NMEA gps messages from 5G mobile cells without the need for a dedicated gps dongle. 
 
@@ -30,8 +31,11 @@ Update the package manager
 Install nano package  
 ``opkg install nano``
 
-Change the port to the 5800. The port the Cerbo GX for listens on for gps data  
-``nano /etc/config/gpsd``
+Install socat
+socat is used as it will continue to work even when the CerboGX is rebooted.
+Note the installed socat is a busybox cutdown verson, and foes not work  
+
+``opkg install socat``
 
 Check gpsd is working  
 ``cat /dev/mhi_LOOPBACK``
@@ -49,3 +53,73 @@ $GPGSA,A,3,16,18,25,26,27,28,29,31,,,,,0.7,0.4,0.5,1*22
 ```
 
 Useful decoder at:  https://rl.se/gprmc
+
+Create a script file used to forward the NMEA messages to the CerboGX
+future note, might be able to put the socat call directly inside the 
+gpsdservice file further down, eliminating the need for this file  
+``nano /etc/gpsd-daemon.sh``
+
+Enter the following and save. changing the IP address to the address of the CerboGX
+```
+#!/bin/sh..  
+
+#using udp4-datagram as this survives cerbo gx reboots. 
+socat -u /dev/mhi_LOOPBACK udp4-datagram:192.168.10.20:8500
+```
+
+Make the script executable  
+``chmod 755 /etc/gpsd-daemon.sh``
+
+Create the service  
+``nano /etc/init.d/gpsdservice``
+
+Enter the following and save
+```
+#!/bin/sh /etc/rc.common.
+
+USE_PROCD=1
+START=99
+STOP=01
+
+CONFIGURATION=gpsdservice
+
+start_service() {
+  # Reading config
+  config_load "${CONFIGURATION}"
+  local IP
+ 
+  config_get IP venus IP
+  
+	procd_open_instance
+	procd_set_param command socat
+	procd_append_param -u /dev/mhi_LOOPBACK udp4-datagram:$IP # append command parameters
+	procd_close_instance
+}
+
+```
+
+Mark the file as executable  
+``chmod 755 /etc/init.d/gpsdservice``
+
+Enable and start the service
+```
+/etc/init.d/gpsdservice enable
+/etc/init.d/gpsdservice start
+```
+Note you can also start, stop and enable the service from the luci UI
+
+Check service status with  
+``service --status-all | grep 'gpsdservice'``
+
+##Cerbo GX setup
+In the Cerbo goto settings>>gps
+You should see a new gps device listed
+If it does not show, reboot.
+
+
+
+#Todo
+See if the gpsd-daemon.sh can be removed
+See if it survives a router firmware update, fix as appropriate.
+Possibly use uci config to configure the service ip address
+Plugin for the router ui. Is there an API for this?
