@@ -1,0 +1,5 @@
+touch gpsdservice
+uci set gpsdservice.venus=gpsdservice
+uci set gpsdservice.venus.ip=192.168.10.20:8500
+uci commit gpsdservice
+uci show gpsdservice
