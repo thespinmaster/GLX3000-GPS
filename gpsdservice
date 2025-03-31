@@ -11,7 +11,7 @@ start_service() {
   config_load "${CONFIGURATION}"
   local ip
  
-  config_get IP venus ip
+  config_get ip venus ip
   
 	procd_open_instance
 	procd_set_param command socat -u /dev/mhi_LOOPBACK udp4-datagram:$ip:5800
