@@ -53,7 +53,9 @@ Useful decoder at:  https://rl.se/gprmc
 ## Install service
 
 Download the install script from github  
-```wget -O gpsdservice-install.sh https://raw.githubusercontent.com/thespinmaster/GLX3000-GPS/refs/heads/main/gpsdservice-install.sh```
+```
+wget -O gpsdservice-install.sh https://raw.githubusercontent.com/thespinmaster/GLX3000-GPS/refs/heads/main/gpsdservice-install.sh
+```
 
 Change the permissions and run the script  
 ```
