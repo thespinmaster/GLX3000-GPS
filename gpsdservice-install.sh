@@ -21,7 +21,7 @@ chmod 755 /etc/init.d/gpsdservice
 
 echo update the config ip to: $ip
 uci set gpsdservice.venus.ip=$ip
-uci commit
+uci commit gpsdservice
 
 echo enable and start the service
 /etc/init.d/gpsdservice enable
