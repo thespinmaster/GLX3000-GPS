@@ -3,6 +3,11 @@
 echo Enter the IP address of the Venus OS
 read ip
 
+if [[-z "$ip]]; then
+  echo "no ip address"
+  exit
+fi
+
 source="https://raw.githubusercontent.com/thespinmaster/GLX3000-GPS/refs/heads/main"
 
 #download gsddservice
