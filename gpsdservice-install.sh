@@ -3,7 +3,7 @@
 echo Enter the IP address of the Venus OS
 read ip
 
-if [[-z "$ip]]; then
+if [[-z "$ip"]]; then
   echo "no ip address"
   exit
 fi
@@ -16,13 +16,13 @@ wget -O "/etc/init.d/gpsdservice" "${source}/gpsdservice"
 #download service config
 wget -O "/etc/config/gpsdservice""" "${source}/gpsdservice-config"
 
-#change the permissions for the service
+echo change the permissions for the service
 chmod 755 /etc/init.d/gpsdservice
 
-#update the config ip to '$ip'
+echo update the config ip to '$ip'
 uci set gpsdservice.venus.ip=$ip
 
-#enable and start the service
+echo enable and start the service
 /etc/init.d/gpsdservice enable
 # /etc/init.d/gpsdservice start
 

@@ -11,6 +11,6 @@ wget -O /etc/config/gpsdservice https://raw.githubusercontent.com/thespinmaster/
 
 
 
-wget -O /etc/config/gpsdservice https://raw.githubusercontent.com/thespinmaster/GLX3000-GPS/refs/heads/main/gpsdservice-install
+wget -O /etc/config/gpsdservice https://raw.githubusercontent.com/thespinmaster/GLX3000-GPS/refs/heads/main/gpsdservice-install.sh
 
 chmod 775 gpsdservice-install.sh
