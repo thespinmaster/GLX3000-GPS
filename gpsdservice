@@ -14,8 +14,7 @@ start_service() {
   config_get ip venus ip
   
 	procd_open_instance
-	procd_set_param command socat -u /dev/mhi_LOOPBACK udp4-datagram:$ip:5800
-	
+	procd_set_param command socat -u /dev/mhi_LOOPBACK udp4-datagram:$ip:8500
 	procd_set_param respawn  # respawn the service if it exits
   procd_set_param stdout 1 # forward stdout of the command to logd
   procd_set_param stderr 1 # same for stderr
