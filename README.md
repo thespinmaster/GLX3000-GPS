@@ -25,16 +25,22 @@ T+QGPS=1
 SSH into the router
 
 Update the package manager  
-```opkg update```
+```
+opkg update
+```
 
 Install socat  
 socat is used as it will continue to work even when the Venus OS is rebooted.
 Note the installed socat is a busybox cutdown verson, and does not work. 
 
-```opkg install socat```
+```
+opkg install socat
+```
 
 Check gpsd is working  
-```cat /dev/mhi_LOOPBACK```
+```
+cat /dev/mhi_LOOPBACK
+```
  
 Should see NMEA messages being output every few seconds. Ctrl C to quit
 ```
@@ -71,7 +77,9 @@ The gpsd service config file will download to /etc/config/gpsdservice
 After which the script will enable and run the service.
 
 Check the service is running.  
-```service --status-all | grep 'gpsdservice'```
+```
+service --status-all | grep 'gpsdservice'
+```
 
 Stop/disable the service with  
 ```
@@ -85,7 +93,7 @@ Update the ip address with
 uci set gpsdservice.venus.ip=[ip address]
 ```
 
-##Cerbo GX setup
+## Venus OS setup
 In the Cerbo goto settings>>gps
 You should see a new gps device listed
 If it does not show, reboot.
