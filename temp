@@ -7,3 +7,10 @@ uci show gpsdservice
 wget -O /etc/init.d/gpsdservice https://raw.githubusercontent.com/thespinmaster/GLX3000-GPS/refs/heads/main/gpsdservice
 wget -O /etc/config/gpsdservice https://raw.githubusercontent.com/thespinmaster/GLX3000-GPS/refs/heads/main/gpsdservice.config
 
+
+
+
+
+wget -O /etc/config/gpsdservice https://raw.githubusercontent.com/thespinmaster/GLX3000-GPS/refs/heads/main/gpsdservice-install
+
+chmod 775 gpsdservice-install.sh

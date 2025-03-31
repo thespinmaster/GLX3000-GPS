@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
  
 echo Enter the IP address of the Venus OS
 read ip
