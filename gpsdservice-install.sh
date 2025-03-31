@@ -19,7 +19,7 @@ wget -O "/etc/config/gpsdservice""" "${source}/gpsdservice-config"
 #change the permissions for the service
 chmod 755 /etc/init.d/gpsdservice
 
-#update the config ip to the one inputed earlier
+#update the config ip to '$ip'
 uci set gpsdservice.venus.ip=$ip
 
 #enable and start the service
