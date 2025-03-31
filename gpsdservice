@@ -15,6 +15,7 @@ start_service() {
   
 	procd_open_instance
 	procd_set_param command socat
-	procd_append_param command -u /dev/mhi_LOOPBACK udp4-datagram:$IP # append command parameters
+	# append command parameters
+	procd_append_param command -u /dev/mhi_LOOPBACK udp4-datagram:$IP
 	procd_close_instance
 }
