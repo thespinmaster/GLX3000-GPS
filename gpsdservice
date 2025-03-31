@@ -9,13 +9,13 @@ CONFIGURATION=gpsdservice
 start_service() {
   # Reading config
   config_load "${CONFIGURATION}"
-  local IP
+  local ip
  
-  config_get IP venus IP
+  config_get IP venus ip
   
 	procd_open_instance
-	procd_set_param command socat
-	# append command parameters
-	procd_append_param command -u /dev/mhi_LOOPBACK udp4-datagram:$IP:5800
+	procd_set_param command socat -u /dev/mhi_LOOPBACK udp4-datagram:$ip:5800
+	
+	procd_set_param respawn ${respawn_threshold:-60} ${respawn_timeout:-5} ${respawn_retry:-5}
 	procd_close_instance
 }
