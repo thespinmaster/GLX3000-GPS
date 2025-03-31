@@ -25,6 +25,6 @@ uci commit gpsdservice
 
 echo enable and start the service
 /etc/init.d/gpsdservice enable
-# /etc/init.d/gpsdservice start
+/etc/init.d/gpsdservice start
 
 

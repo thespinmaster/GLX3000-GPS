@@ -3,16 +3,16 @@
 
 The following instructions are for enabling the forwarding of NMEA gps messages from 5G mobile cells without the need for a dedicated gps dongle. 
 
-The messages are forwarded to a Victron CerboGX
+The messages are forwarded to a Victron CerboGX (or any device running the Venus OS)
 
 ## Hardware
-GL-Net x3000 Spitz router  
-Victron Cerbo GX
+GL-Net x3000 Spitz router (other OpenWRT routers may work)  
+Victron Cerbo GX (or any device running the Venus OS)
 
 ## Router setup
 Log into the routers web ui
 
-First enable gpsd in the 5G modem settings
+Enable gpsd in the modems 5G settings
 
 Open the cellular settings page …
 
@@ -25,20 +25,16 @@ T+QGPS=1
 SSH into the router
 
 Update the package manager  
-``opkg update``
+```opkg update```
 
-(Optional)
-Install nano package  
-``opkg install nano``
+Install socat  
+socat is used as it will continue to work even when the Venus OS is rebooted.
+Note the installed socat is a busybox cutdown verson, and does not work. 
 
-Install socat
-socat is used as it will continue to work even when the CerboGX is rebooted.
-Note the installed socat is a busybox cutdown verson, and foes not work  
-
-``opkg install socat``
+```opkg install socat```
 
 Check gpsd is working  
-``cat /dev/mhi_LOOPBACK``
+```cat /dev/mhi_LOOPBACK```
  
 Should see NMEA messages being output every few seconds. Ctrl C to quit
 ```
@@ -54,72 +50,41 @@ $GPGSA,A,3,16,18,25,26,27,28,29,31,,,,,0.7,0.4,0.5,1*22
 
 Useful decoder at:  https://rl.se/gprmc
 
-Create a script file used to forward the NMEA messages to the CerboGX
-future note, might be able to put the socat call directly inside the 
-gpsdservice file further down, eliminating the need for this file  
-``nano /etc/gpsd-daemon.sh``
+## Install service
 
-Enter the following and save. changing the IP address to the address of the CerboGX
+Download the install script from github  
+```wget -O gpsdservice-install.sh https://raw.githubusercontent.com/thespinmaster/GLX3000-GPS/refs/heads/main/gpsdservice-install.sh```
+
+Change the permissions and run the script  
 ```
-#!/bin/sh..  
-
-#using udp4-datagram as this survives cerbo gx reboots. 
-socat -u /dev/mhi_LOOPBACK udp4-datagram:192.168.10.20:8500
+chmod 755 gpsdservice-install.sh 
+./gpsdservice-install.sh
 ```
 
-Make the script executable  
-``chmod 755 /etc/gpsd-daemon.sh``
+Enter the ip address of the Venus OS when prompted. i.e. 192.168.32.20
 
-Create the service  
-``nano /etc/init.d/gpsdservice``
+The gpsd service file will download to /etc/init.d/gpsdservice  
+The gpsd service config file will download to /etc/config/gpsdservice  
 
-Enter the following and save
+After which the script will enable and run the service.
+
+Check the service is running.  
+```service --status-all | grep 'gpsdservice'```
+
+Stop/disable the service with  
 ```
-#!/bin/sh /etc/rc.common.
-
-USE_PROCD=1
-START=99
-STOP=01
-
-CONFIGURATION=gpsdservice
-
-start_service() {
-  # Reading config
-  config_load "${CONFIGURATION}"
-  local IP
- 
-  config_get IP venus IP
-  
-	procd_open_instance
-	procd_set_param command socat
-	procd_append_param -u /dev/mhi_LOOPBACK udp4-datagram:$IP # append command parameters
-	procd_close_instance
-}
-
-```
-
-Mark the file as executable  
-``chmod 755 /etc/init.d/gpsdservice``
-
-Enable and start the service
-```
-/etc/init.d/gpsdservice enable
-/etc/init.d/gpsdservice start
+/etc/init.d/gpsdservice stop
+/etc/init.d/gpsdservice disable
 ```
 Note you can also start, stop and enable the service from the luci UI
 
-Check service status with  
-``service --status-all | grep 'gpsdservice'``
+Update the ip address with
+```
+uci set gpsdservice.venus.ip=[ip address]
+```
 
 ##Cerbo GX setup
 In the Cerbo goto settings>>gps
 You should see a new gps device listed
 If it does not show, reboot.
 
-
-
-#Todo
-See if the gpsd-daemon.sh can be removed
-See if it survives a router firmware update, fix as appropriate.
-Possibly use uci config to configure the service ip address
-Plugin for the router ui. Is there an API for this?
