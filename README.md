@@ -3,6 +3,7 @@
 
 The following instructions are for enabling the forwarding of NMEA gps messages from 5G mobile cells without the need for a dedicated gps dongle. 
 
+
 The messages are forwarded to a Victron CerboGX (or any device running the Venus OS)
 
 ## Hardware
