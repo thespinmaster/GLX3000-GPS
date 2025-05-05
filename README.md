@@ -95,7 +95,4 @@ uci set gpsdservice.venus.ip=[ip address]
 ```
 
 ## Venus OS setup
-In the Cerbo goto settings>>gps
-You should see a new gps device listed
-If it does not show, reboot.
-
+See CerboGX mods
